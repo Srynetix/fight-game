@@ -53,5 +53,12 @@ position = Vector2( 515.152, 447.9 )
 
 position = Vector2( 311.737, 329.865 )
 mass = 5.0
+PlayerID = 1
+
+[node name="character2" parent="." index="3" instance=ExtResource( 3 )]
+
+position = Vector2( 723.491, 329.865 )
+mass = 5.0
+PlayerID = 2
 
 

@@ -1,5 +1,8 @@
 extends RigidBody2D
 
+# Exports
+export(int) var PlayerID = 1
+
 # Constants
 var MAX_FLOOR_AIRBORNE_TIME = 0.15
 var WALK_MAX_VELOCITY = 200.0
@@ -9,18 +12,24 @@ var AIR_ACCEL = 800.0
 var AIR_DEACCEL = 800.0
 var JUMP_VELOCITY = 500.0
 var STOP_JUMP_FORCE = 900.0
-var MAX_JUMP_COUNT = 2
+var MAX_JUMP_COUNT = 3
+var ATTACK_TIME = 0.25
 
 # States
 var is_jumping = false
 var is_stopping_jump = false
 var is_siding_left = false
+var is_attacking = false
 
 # Values
 var animation = 'idle'
 var airborne_time = 1e20
+var attack_time = ATTACK_TIME
 var floor_velocity = 0.0
 var jump_count = 0
+
+func get_input_action(name):
+    return "p{id}_{name}".format({'id': PlayerID, 'name': name})
 
 func detect_floor(state):
     var found_floor = false
@@ -38,9 +47,10 @@ func _integrate_forces(state):
     var lvel = state.get_linear_velocity()
     var step = state.get_step()
 
-    var move_left = Input.is_action_pressed('ui_left')
-    var move_right = Input.is_action_pressed('ui_right')
-    var jump = Input.is_action_just_pressed('ui_accept')
+    var move_left = Input.is_action_pressed(get_input_action('left'))
+    var move_right = Input.is_action_pressed(get_input_action('right'))
+    var jump = Input.is_action_just_pressed(get_input_action('jump'))
+    var attack = Input.is_action_just_pressed(get_input_action('attack'))
 
     var next_siding_left = is_siding_left
     var next_animation = animation
@@ -95,12 +105,13 @@ func _integrate_forces(state):
         elif lvel.x > 0 and move_right:
             next_siding_left = false
 
-        if is_jumping:
-            pass
-        elif abs(lvel.x) < 0.1:
-            next_animation = 'idle'
-        else:
-            next_animation = 'walk'
+        if not is_attacking:
+            if is_jumping:
+                next_animation = 'jump'
+            elif abs(lvel.x) < 0.1:
+                next_animation = 'idle'
+            else:
+                next_animation = 'walk'
 
     else:
         # In air
@@ -128,6 +139,17 @@ func _integrate_forces(state):
             next_siding_left = true
         elif lvel.x > 0 and move_right:
             next_siding_left = false
+
+    # Attack
+    if is_attacking:
+        attack_time -= step
+        if attack_time <= 0:
+            attack_time = ATTACK_TIME
+            is_attacking = false
+
+    if not is_attacking and attack:
+        is_attacking = true
+        next_animation = 'attack'
 
     if next_siding_left != is_siding_left:
         if next_siding_left:

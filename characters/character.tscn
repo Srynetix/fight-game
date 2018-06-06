@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://characters/character.gd" type="Script" id=1]
-[ext_resource path="res://assets/textures/chara_idle.png" type="Texture" id=2]
-[ext_resource path="res://assets/textures/chara_walk.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/chara_attack.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/chara_idle.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/chara_jumping.png" type="Texture" id=4]
+[ext_resource path="res://assets/textures/chara_walk.png" type="Texture" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -10,7 +12,38 @@ custom_solver_bias = 0.0
 radius = 16.1728
 height = 25.8272
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=6]
+
+resource_name = "attack"
+length = 1.0
+loop = false
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 2 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="Animation" id=7]
 
 length = 2.0
 loop = true
@@ -37,12 +70,41 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ ExtResource( 2 ) ]
+"values": [ ExtResource( 3 ) ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=8]
 
-resource_name = "walk"
+length = 2.0
+loop = false
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 4 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="Animation" id=5]
+
 length = 2.0
 loop = true
 step = 0.1
@@ -56,7 +118,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ ExtResource( 3 ) ]
+"values": [ ExtResource( 5 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("sprite:frame")
@@ -94,6 +156,7 @@ angular_velocity = 0.0
 angular_damp = -1.0
 script = ExtResource( 1 )
 _sections_unfolded = [ "Angular", "Collision", "Linear", "Pickable", "Transform", "Z Index", "collision" ]
+PlayerID = 1
 
 [node name="shape" type="CollisionShape2D" parent="." index="0"]
 
@@ -106,7 +169,8 @@ position = Vector2( 0, -16 )
 scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 2 )
 hframes = 4
-_sections_unfolded = [ "Transform" ]
+frame = 3
+_sections_unfolded = [ "Animation", "Transform" ]
 
 [node name="anim" type="AnimationPlayer" parent="." index="2"]
 
@@ -115,8 +179,10 @@ autoplay = "idle"
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 4.0
-anims/idle = SubResource( 2 )
-anims/walk = SubResource( 3 )
+anims/attack = SubResource( 6 )
+anims/idle = SubResource( 7 )
+anims/jump = SubResource( 8 )
+anims/walk = SubResource( 5 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
