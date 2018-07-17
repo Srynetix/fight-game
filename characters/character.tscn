@@ -12,7 +12,7 @@ custom_solver_bias = 0.0
 radius = 16.1728
 height = 25.8272
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=2]
 
 resource_name = "attack"
 length = 1.0
@@ -43,7 +43,7 @@ tracks/1/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=3]
 
 length = 2.0
 loop = true
@@ -73,7 +73,7 @@ tracks/1/keys = {
 "values": [ ExtResource( 3 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=4]
 
 length = 2.0
 loop = false
@@ -133,14 +133,16 @@ tracks/1/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 
-[node name="character" type="RigidBody2D"]
+[node name="character" type="RigidBody2D" groups=[
+"character",
+]]
 
 position = Vector2( 527.706, 279.882 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
 mode = 2
-mass = 1.0
+mass = 5.0
 friction = 0.0
 bounce = 0.0
 gravity_scale = 1.0
@@ -179,9 +181,9 @@ autoplay = "idle"
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 4.0
-anims/attack = SubResource( 6 )
-anims/idle = SubResource( 7 )
-anims/jump = SubResource( 8 )
+anims/attack = SubResource( 2 )
+anims/idle = SubResource( 3 )
+anims/jump = SubResource( 4 )
 anims/walk = SubResource( 5 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]

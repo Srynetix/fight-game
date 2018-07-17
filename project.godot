@@ -11,8 +11,9 @@ config_version=3
 [application]
 
 config/name="fight-game"
-run/main_scene="res://screens/menus/main/main_menu.tscn"
+run/main_scene="res://screens/arena/test_arena.tscn"
 config/icon="res://icon.png"
+run/name="fight-game"
 
 [display]
 
