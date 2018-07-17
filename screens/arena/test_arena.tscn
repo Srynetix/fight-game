@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://screens/arena/test_arena.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/star_background.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://characters/character_player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://characters/character_ai.tscn" type="PackedScene" id=5]
 [ext_resource path="res://screens/arena/ui.tscn" type="PackedScene" id=6]
+[ext_resource path="res://screens/arena/input.tscn" type="PackedScene" id=7]
 
 [sub_resource type="Animation" id=1]
 
@@ -112,5 +113,10 @@ Disable = false
 
 margin_right = 959.0
 margin_bottom = 510.0
+
+[node name="input" parent="." index="6" instance=ExtResource( 7 )]
+
+margin_right = 961.0
+margin_bottom = 513.0
 
 
