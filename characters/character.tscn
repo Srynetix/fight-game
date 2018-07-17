@@ -133,7 +133,7 @@ tracks/1/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 
-[node name="character" type="RigidBody2D" groups=[
+[node name="character" type="RigidBody2D" index="0" groups=[
 "character",
 ]]
 

@@ -5,6 +5,11 @@ export(int) var PlayerID = 1
 
 # Signals
 signal hit(attacker, damage)
+signal damage_update(target)
+
+# Imports
+var attack_system = load('res://characters/attack_system.gd').new()
+var input_system = load('res://characters/input_system.gd').new()
 
 # Constants
 var MAX_FLOOR_AIRBORNE_TIME = 0.15
@@ -17,16 +22,9 @@ var AIR_DEACCEL = 800.0
 var JUMP_VELOCITY = 500.0
 var STOP_JUMP_FORCE = 900.0
 var MAX_JUMP_COUNT = 3
-var ATTACK_TIME = 0.25
+var ATTACK_TIME = 0.15
 var HIT_TIME = 0.25
-var HIT_VELOCITY = Vector2(500, -100)
 var FLOOR_DETECTION_THRESHOLD = 0.6
-
-# Inputs
-var is_input_left_pressed = false
-var is_input_right_pressed = false
-var is_input_jump_just_pressed = false
-var is_input_attack_just_pressed = false
 
 # States
 var is_jumping = false
@@ -40,24 +38,49 @@ var animation = 'idle'
 var airborne_time = 1e20
 var attack_time = ATTACK_TIME
 var hit_time = HIT_TIME
-var hit_direction = Vector2(0, 0)
+var hit_direction = Vector2(1, 1)
 var floor_velocity = 0.0
 var jump_count = 0
+
+var current_damages = 0
+var current_attack_type = ''
+var hit_velocity_next_frame = 0
+
+func get_attack_type_from_input():
+    if self.input_system.get_key_state("attack"):
+        if self.input_system.get_key_state("move_left") or self.input_system.get_key_state("move_right"):
+            return 'high'
+        else:
+            return 'low'
+
+    return ''
+
 
 func _ready():
     connect("hit", self, "on_hit")
 
-func on_hit(attacker, damage):
+func _process(delta):
+    self.input_system.update_system(delta)
+
+func on_hit(attacker):
     if not self.is_hit:
-        self.hit_direction = (self.position - attacker.position).normalized()
+        var attack_data = attack_system.get_data_from_attack(attacker.current_attack_type)
+        var attack_hit_direction = (self.position - attacker.position).normalized()
 
         print('Attacked by {name}, w/ {damage} damages in direction {direction}.'.format({
             'name': attacker.name,
-            'damage': damage,
-            'direction': self.hit_direction
+            'damage': attack_data["dmg"],
+            'direction': attack_hit_direction
         }))
 
+        self.current_damages += attack_data["dmg"]
         self.is_hit = true
+        self.hit_velocity_next_frame = attack_system.calculate_impulse_from_attack(self, attack_data)
+
+        self.hit_direction.x = attack_hit_direction.x
+
+        # Damage update
+        emit_signal("damage_update", self)
 
 func detect_floor(state):
     var found_floor = false
@@ -81,19 +104,21 @@ func detect_player(state):
 
     return player_found
 
-func handle_input():
-    """Do not handle input in base class."""
+func _handle_character_input():
+    pass
 
 func _integrate_forces(state):
     var lvel = state.get_linear_velocity()
     var step = state.get_step()
     var impulse = Vector2(0, 0)
 
-    self.handle_input()
-    var move_left = self.is_input_left_pressed
-    var move_right = self.is_input_right_pressed
-    var jump = self.is_input_jump_just_pressed
-    var attack = self.is_input_attack_just_pressed
+    # Handle input
+    self._handle_character_input()
+
+    var move_left = self.input_system.get_key_state("move_left")
+    var move_right = self.input_system.get_key_state("move_right")
+    var jump = self.input_system.get_key_state("jump")
+    var attack = self.input_system.get_key_state("attack")
 
     var next_siding_left = self.is_siding_left
     var next_animation = self.animation
@@ -106,7 +131,7 @@ func _integrate_forces(state):
     var player = detect_player(state)
     if player:
         if self.is_attacking and not player.is_hit:
-            player.emit_signal('hit', self, 10)
+            player.emit_signal('hit', self)
 
     # Detect floor
     var floor_index = detect_floor(state)
@@ -200,7 +225,7 @@ func _integrate_forces(state):
     if self.is_hit:
         if self.hit_time == HIT_TIME:
             # Apply hit impulse
-            impulse = HIT_VELOCITY * self.hit_direction
+            impulse = self.hit_velocity_next_frame * self.hit_direction
 
         self.hit_time -= step
         if self.hit_time <= 0:
@@ -210,6 +235,7 @@ func _integrate_forces(state):
     # Attacking?
     if not self.is_attacking and attack:
         self.is_attacking = true
+        self.current_attack_type = get_attack_type_from_input()
         next_animation = 'attack'
 
     if next_siding_left != self.is_siding_left:
@@ -236,4 +262,3 @@ func _integrate_forces(state):
     lvel += impulse
 
     state.set_linear_velocity(lvel)
-    # state.integrate_forces()
