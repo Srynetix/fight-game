@@ -18,8 +18,11 @@ run/name="fight-game"
 [display]
 
 window/size/height=576
+window/size/resizable=false
+window/handheld/emulate_touchscreen=true
 window/stretch/mode="viewport"
-window/stretch/aspect="keep"
+window/stretch/aspect="keep_width"
+window/stretch/shrink="1"
 
 [input]
 
