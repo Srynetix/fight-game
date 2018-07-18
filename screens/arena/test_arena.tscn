@@ -1,16 +1,21 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://screens/arena/test_arena.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/star_background.png" type="Texture" id=2]
 [ext_resource path="res://screens/arena/platform.tscn" type="PackedScene" id=3]
-[ext_resource path="res://characters/character_player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://characters/character_ai.tscn" type="PackedScene" id=5]
-[ext_resource path="res://screens/arena/hud.tscn" type="PackedScene" id=6]
-[ext_resource path="res://utils/virtual_input.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/textures/test_platform.png" type="Texture" id=4]
+[ext_resource path="res://characters/character_player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://characters/character_ai.tscn" type="PackedScene" id=6]
+[ext_resource path="res://screens/arena/hud.tscn" type="PackedScene" id=7]
+[ext_resource path="res://utils/virtual_input.tscn" type="PackedScene" id=8]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="RectangleShape2D" id=1]
 
-resource_name = "default"
+custom_solver_bias = 0.0
+extents = Vector2( 610, 380 )
+
+[sub_resource type="Animation" id=2]
+
 length = 4.0
 loop = true
 step = 0.1
@@ -27,16 +32,33 @@ tracks/0/keys = {
 "values": [ Rect2( 0, 0, 1024, 576 ), Rect2( 1024, 0, 1024, 576 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=3]
 
 custom_solver_bias = 0.0
-extents = Vector2( 10, 167.216 )
+extents = Vector2( 30, 10 )
 
 [node name="arena" type="Node" index="0"]
 
 script = ExtResource( 1 )
 
-[node name="background" type="Sprite" parent="." index="0"]
+[node name="game_zone" type="Area2D" parent="." index="0" groups=[
+"game_zone",
+]]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="game_zone" index="0"]
+
+position = Vector2( 510, 290 )
+shape = SubResource( 1 )
+
+[node name="background" type="Sprite" parent="." index="1"]
 
 editor/display_folded = true
 texture = ExtResource( 2 )
@@ -52,18 +74,19 @@ autoplay = "default"
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 0.25
-anims/default = SubResource( 1 )
+anims/default = SubResource( 2 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
-[node name="platform" parent="." index="1" instance=ExtResource( 3 )]
+[node name="walls" type="Node2D" parent="." index="2"]
+
+[node name="platform" parent="walls" index="0" instance=ExtResource( 3 )]
 
 position = Vector2( 515.152, 447.9 )
 
-[node name="left_wall" type="StaticBody2D" parent="." index="2"]
+[node name="left_block" type="StaticBody2D" parent="walls" index="1"]
 
-editor/display_folded = true
-position = Vector2( 134.293, 295.48 )
+position = Vector2( 160, 430 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -71,16 +94,23 @@ constant_linear_velocity = Vector2( 0, 0 )
 constant_angular_velocity = 0.0
 friction = 1.0
 bounce = 0.0
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="shape" type="CollisionShape2D" parent="left_wall" index="0"]
+[node name="shape" type="CollisionShape2D" parent="walls/left_block" index="0"]
 
-position = Vector2( 12.2434, -4.08115 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="right_wall" type="StaticBody2D" parent="." index="3"]
+[node name="sprite" type="Sprite" parent="walls/left_block" index="1"]
 
-editor/display_folded = true
-position = Vector2( 134.293, 295.48 )
+scale = Vector2( 0.0872396, 1 )
+texture = ExtResource( 4 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="right_block" type="StaticBody2D" parent="walls" index="2"]
+
+position = Vector2( 870, 430 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -88,30 +118,40 @@ constant_linear_velocity = Vector2( 0, 0 )
 constant_angular_velocity = 0.0
 friction = 1.0
 bounce = 0.0
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="shape" type="CollisionShape2D" parent="right_wall" index="0"]
+[node name="shape" type="CollisionShape2D" parent="walls/right_block" index="0"]
 
-position = Vector2( 749.566, -2.72076 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="players" type="Node2D" parent="." index="4"]
+[node name="sprite" type="Sprite" parent="walls/right_block" index="1"]
 
-[node name="player" parent="players" index="0" instance=ExtResource( 4 )]
+scale = Vector2( 0.0872396, 1 )
+texture = ExtResource( 4 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="players" type="Node2D" parent="." index="3"]
+
+editor/display_folded = true
+
+[node name="player" parent="players" index="0" instance=ExtResource( 5 )]
 
 position = Vector2( 259.712, 365.586 )
 mass = 1.0
 
-[node name="ai" parent="players" index="1" instance=ExtResource( 5 )]
+[node name="ai" parent="players" index="1" instance=ExtResource( 6 )]
 
 position = Vector2( 773.934, 362.865 )
 mass = 1.0
 PlayerID = 2
 
-[node name="hud" parent="." index="5" instance=ExtResource( 6 )]
+[node name="hud" parent="." index="4" instance=ExtResource( 7 )]
 
 margin_right = 0.0
 
-[node name="virtual_input" parent="." index="6" instance=ExtResource( 7 )]
+[node name="virtual_input" parent="." index="5" instance=ExtResource( 8 )]
 
 DEBUG_EVENTS = false
 DEBUG_LIGHTS = false

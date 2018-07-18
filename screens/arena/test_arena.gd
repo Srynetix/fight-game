@@ -30,8 +30,15 @@ func _ready():
     if not virtual_input.Disabled:
         $players/player.input_system.set_virtual_input(virtual_input)
 
+    $game_zone.connect("body_exited", self, "_on_game_zone_body_exited")
+
 func _on_joystick_moved(movement, force):
     $players/player.input_system.handle_virtual_joystick(movement, force)
 
 func _on_button_pressed(button):
     $players/player.input_system.handle_virtual_button(button)
+
+func _on_game_zone_body_exited(body):
+    if body.is_in_group("character"):
+        print("CHARACTER FELL")
+        body.queue_free()
