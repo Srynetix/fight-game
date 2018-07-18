@@ -3,7 +3,7 @@
 [ext_resource path="res://fonts/FiraMono-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://fonts/FiraSans-Regular.ttf" type="DynamicFontData" id=2]
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=1]
 
 size = 24
 use_mipmaps = true
@@ -11,7 +11,7 @@ use_filter = true
 font_data = ExtResource( 1 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=2]
 
 size = 32
 use_mipmaps = false
@@ -27,7 +27,7 @@ use_filter = true
 font_data = ExtResource( 2 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="margin" type="MarginContainer" index="0"]
+[node name="margin" type="MarginContainer"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -79,7 +79,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 0.25098 )
 text = "Inputs: "
 valign = 1
@@ -139,7 +139,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 2 )
 text = "P1"
 percent_visible = 1.0
 lines_skipped = 0
@@ -203,7 +203,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 2 )
 text = "P2"
 percent_visible = 1.0
 lines_skipped = 0
@@ -267,7 +267,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 2 )
 text = "P3"
 percent_visible = 1.0
 lines_skipped = 0
@@ -331,7 +331,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 2 )
 text = "P4"
 percent_visible = 1.0
 lines_skipped = 0
