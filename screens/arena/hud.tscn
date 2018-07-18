@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://fonts/FiraMono-Regular.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://fonts/FiraSans-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/fonts/FiraMono-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/fonts/FiraSans-Regular.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
 
@@ -27,7 +27,7 @@ use_filter = true
 font_data = ExtResource( 2 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="margin" type="MarginContainer"]
+[node name="hud" type="MarginContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
