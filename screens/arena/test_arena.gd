@@ -1,10 +1,9 @@
 extends Node
 
-onready var ui = $ui
 onready var virtual_input = $virtual_input
 
 func get_player_ui(player_id):
-    var container = $ui/vbox/hbox
+    var container = $hud/vbox/hbox
     var player_identifier = "p{id}".format({'id': player_id})
     return container.get_node(player_identifier)
 
@@ -18,7 +17,7 @@ func update_damages(target):
 
 
 func update_inputs(buffer):
-    var inputs_ui = $ui/vbox/inputs
+    var inputs_ui = $hud/vbox/inputs
     inputs_ui.text = "Inputs: " + buffer
 
 
