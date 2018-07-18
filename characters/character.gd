@@ -8,8 +8,8 @@ signal hit(attacker, damage)
 signal damage_update(target)
 
 # Imports
-var attack_system = load('res://characters/attack_system.gd').new()
-var input_system = load('res://characters/input_system.gd').new()
+var attack_system = preload('res://characters/attack_system.gd').new()
+var input_system = preload('res://characters/input_system.gd').new()
 
 # Constants
 var MAX_FLOOR_AIRBORNE_TIME = 0.15
