@@ -12,6 +12,7 @@ export (bool) var DEBUG_LIGHTS = false
 const JOYSTICK_DEADZONE = 0.30
 
 onready var joystick = $margin/vbox/hbox/joystick
+onready var joystick_ball = $margin/vbox/hbox/joystick/container/ball
 onready var jump_btn = $margin/vbox/hbox/buttons/jump
 onready var attack_btn = $margin/vbox/hbox/buttons/attack
 onready var special_btn = $margin/vbox/hbox/buttons/special
@@ -73,6 +74,7 @@ func _on_touch_released(idx):
     if idx == joystick_touch_idx:
         joystick_touch_idx = -1
         self._reset_movement_state()
+        joystick_ball.rect_position = joystick.get_size() / 2 - joystick_ball.get_size() / 2
         self._darken_button(self.joystick)
 
     if idx == attack_touch_idx:
@@ -152,6 +154,9 @@ func _input(event):
             var joystick_position = joystick.get_global_position() + joystick.get_size() / 2
             var mouse_joystick_vec = event.position - joystick_position
             var force = mouse_joystick_vec / (joystick.get_size() / 2)
+
+            # Move joystick ball
+            joystick_ball.rect_position = (joystick.get_size() / 2 - joystick_ball.get_size() / 2) + (force * joystick.get_size() / 2)
 
             # Reset movement
             self._reset_movement_state()

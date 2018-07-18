@@ -1,15 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://utils/virtual_input.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/joystick.png" type="Texture" id=2]
-[ext_resource path="res://assets/fonts/FiraMono-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/textures/joystick_ball.png" type="Texture" id=3]
+[ext_resource path="res://assets/fonts/FiraMono-Regular.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 
 size = 64
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 3 )
+font_data = ExtResource( 4 )
 _sections_unfolded = [ "Font", "Settings" ]
 
 [sub_resource type="DynamicFont" id=2]
@@ -17,10 +18,10 @@ _sections_unfolded = [ "Font", "Settings" ]
 size = 64
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 3 )
+font_data = ExtResource( 4 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="virtual_input" type="Control"]
+[node name="virtual_input" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -396,6 +397,42 @@ size_flags_stretch_ratio = 0.5
 texture = ExtResource( 2 )
 stretch_mode = 4
 _sections_unfolded = [ "Mouse", "Rect", "Visibility" ]
+
+[node name="container" type="CenterContainer" parent="margin/vbox/hbox/joystick" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+use_top_left = false
+_sections_unfolded = [ "custom_constants" ]
+
+[node name="ball" type="TextureRect" parent="margin/vbox/hbox/joystick/container" index="0"]
+
+modulate = Color( 0.792969, 0.792969, 0.792969, 1 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 55.0
+margin_top = 55.0
+margin_right = 92.0
+margin_bottom = 92.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 3 )
+stretch_mode = 4
+_sections_unfolded = [ "Focus", "Grow Direction", "Hint", "Mouse", "Size Flags", "Visibility" ]
 
 [node name="buttons" type="HBoxContainer" parent="margin/vbox/hbox" index="1"]
 
