@@ -6,12 +6,20 @@
 [node name="character" index="0" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
+Disable = false
 
 [node name="attack_timer" type="Timer" parent="." index="3"]
 
 process_mode = 1
 wait_time = 1.0
 one_shot = true
+autostart = false
+
+[node name="idle_timer" type="Timer" parent="." index="4"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
 autostart = false
 
 

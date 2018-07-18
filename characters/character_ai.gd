@@ -3,17 +3,25 @@ extends "res://characters/character.gd"
 export (bool) var Disable = false
 
 onready var attack_timer = $attack_timer
+onready var idle_timer = $idle_timer
 
 var PLAYER_LENGTH_THRESHOLD = 40
+var IDLE_DELAY = 1          # secs
+var ACTIVE_DELAY = 2        # secs
 var ATTACK_DELAY = 0.35     # secs
 
 var attack_at_next_turn = false
+var is_idle = false
 
 func _ready():
     """Ready."""
     attack_timer.wait_time = ATTACK_DELAY
     attack_timer.connect("timeout", self, "_on_attack_timer_timeout")
 
+    idle_timer.wait_time = ACTIVE_DELAY
+    idle_timer.connect("timeout", self, "_on_idle_timer_timeout")
+
+    idle_timer.start()
 
 func _detect_players():
     """Detect other players."""
@@ -27,14 +35,28 @@ func _detect_players():
 
 func _on_attack_timer_timeout():
     """On attack timer timeout."""
-    if not self.is_hit:
+    if not self.is_hit and not self.is_idle:
         self.attack_at_next_turn = true
+
+func _on_idle_timer_timeout():
+    """On idle timer timeout."""
+    if self.is_idle:
+        idle_timer.wait_time = ACTIVE_DELAY
+    else:
+        idle_timer.wait_time = IDLE_DELAY
+
+    self.is_idle = !self.is_idle
+    idle_timer.start()
 
 func _handle_character_input():
     """Handle character input."""
 
     # Reset inputs
     self.input_system.reset_input_state()
+
+    # Idle
+    if self.is_idle:
+        return
 
     if Disable:
         return
