@@ -1,6 +1,7 @@
-extends Node2D
+extends Node
 
 onready var ui = $ui
+onready var virtual_input = $virtual_input
 
 func get_player_ui(player_id):
     var container = $ui/vbox/hbox
@@ -26,3 +27,12 @@ func _ready():
     $players/player.input_system.connect("buffer_update", self, "update_inputs")
     $players/ai.connect("damage_update", self, "update_damages")
 
+    # Set virtual input
+    if not virtual_input.Disabled:
+        $players/player.input_system.set_virtual_input(virtual_input)
+
+func _on_joystick_moved(movement, force):
+    $players/player.input_system.handle_virtual_joystick(movement, force)
+
+func _on_button_pressed(button):
+    $players/player.input_system.handle_virtual_button(button)

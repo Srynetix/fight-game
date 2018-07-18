@@ -78,9 +78,9 @@ func _handle_character_input():
 
     if abs(p_length) > PLAYER_LENGTH_THRESHOLD:
         if p_direction.x > 0:
-            self.input_system.enable_key_state("move_right")
+            self.input_system.enable_key_state("right")
         else:
-            self.input_system.enable_key_state("move_left")
+            self.input_system.enable_key_state("left")
     else:
         attack_timer.start()
 

@@ -5,8 +5,8 @@
 [ext_resource path="res://screens/arena/platform.tscn" type="PackedScene" id=3]
 [ext_resource path="res://characters/character_player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://characters/character_ai.tscn" type="PackedScene" id=5]
-[ext_resource path="res://screens/arena/ui.tscn" type="PackedScene" id=6]
-[ext_resource path="res://screens/arena/input.tscn" type="PackedScene" id=7]
+[ext_resource path="res://screens/arena/hud.tscn" type="PackedScene" id=6]
+[ext_resource path="res://utils/virtual_input.tscn" type="PackedScene" id=7]
 
 [sub_resource type="Animation" id=1]
 
@@ -32,14 +32,13 @@ tracks/0/keys = {
 custom_solver_bias = 0.0
 extents = Vector2( 10, 167.216 )
 
-[node name="arena" type="Node2D"]
+[node name="arena" type="Node" index="0"]
 
 script = ExtResource( 1 )
 
 [node name="background" type="Sprite" parent="." index="0"]
 
 editor/display_folded = true
-position = Vector2( 0.814453, 0.814514 )
 texture = ExtResource( 2 )
 centered = false
 region_enabled = true
@@ -108,15 +107,13 @@ position = Vector2( 773.934, 362.865 )
 mass = 1.0
 PlayerID = 2
 
-[node name="ui" parent="." index="5" instance=ExtResource( 6 )]
+[node name="hud" parent="." index="5" instance=ExtResource( 6 )]
 
-margin_right = 959.0
-margin_bottom = 510.0
+margin_right = 0.0
 
-[node name="input" parent="." index="6" instance=ExtResource( 7 )]
+[node name="virtual_input" parent="." index="6" instance=ExtResource( 7 )]
 
-margin_right = 961.0
-margin_bottom = 513.0
 DEBUG_EVENTS = false
+DEBUG_LIGHTS = false
 
 

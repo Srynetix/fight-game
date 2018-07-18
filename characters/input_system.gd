@@ -19,34 +19,36 @@ var move_buffer = []
 var attack_buffer = []
 var combo_buffer = []
 var current_delta = 0
+var player_id = -1
+var virtual_input = null
 
-var MOVE_ACTIONS = ["move_left", "move_right", "crouch", "jump", "move_up"]
+var MOVE_ACTIONS = ["left", "right", "down", "jump", "up"]
 var ATTACK_ACTIONS = ["attack", "special"]
 var COMBO_ACTIONS = {
-    "left_a": ["move_left", "attack"],
-    "right_a": ["move_right", "attack"],
-    "up_a": ["move_up", "attack"],
-    "down_a": ["crouch", "attack"],
-    "left_special": ["move_left", "special"],
-    "right_special": ["move_right", "special"],
-    "up_special": ["move_up", "special"],
-    "down_special": ["crouch", "special"]
+    "left_a": ["left", "attack"],
+    "right_a": ["right", "attack"],
+    "up_a": ["up", "attack"],
+    "down_a": ["down", "attack"],
+    "left_special": ["left", "special"],
+    "right_special": ["right", "special"],
+    "up_special": ["up", "special"],
+    "down_special": ["down", "special"]
 }
 
 var INPUT_MAP = {
-    "move_left": {
+    "left": {
         "key": "left",
         "just": false
     },
-    "move_right": {
+    "right": {
         "key": "right",
         "just": false
     },
-    "move_up": {
+    "up": {
         "key": "up",
         "just": false,
     },
-    "crouch": {
+    "down": {
         "key": "down",
         "just": false,
     },
@@ -65,10 +67,10 @@ var INPUT_MAP = {
 }
 
 var DISPLAY_MAP = {
-    "move_left": "←",
-    "move_right": "→",
-    "move_up": "↑",
-    "crouch": "↓",
+    "left": "←",
+    "right": "→",
+    "up": "↑",
+    "down": "↓",
     "jump": "j",
     "attack": "a",
     "left_a": "a←",
@@ -87,6 +89,9 @@ var DISPLAY_MAP = {
 }
 
 var input_state = _generate_empty_input_state()
+
+func _init(player_id):
+    self.player_id = player_id
 
 func _format_buffers():
     """
@@ -216,9 +221,9 @@ func _update_buffer(key, state):
     emit_signal("buffer_update", _format_buffers())
 
 
-func _get_input_action(name, player_id):
-    """Get input action."""
-    return "p{id}_{name}".format({'id': player_id, 'name': name})
+func _get_player_input_action(name):
+    """Get player input action."""
+    return "p{id}_{name}".format({'id': self.player_id, 'name': name})
 
 
 func _generate_empty_input_state():
@@ -236,17 +241,34 @@ func _set_key_state(key, state):
 
     self.input_state[key] = state
 
-func _handle_player_key(input_key, player_id):
+func _handle_player_key(input_key):
     """Handle player key."""
     var key_info = INPUT_MAP[input_key]
-    var key_name = self._get_input_action(key_info["key"], player_id)
+    var key_name = self._get_player_input_action(key_info["key"])
 
-    if key_info["just"]:
-        self._set_key_state(input_key, Input.is_action_just_pressed(key_name))
+    if self.virtual_input:
+        self._set_key_state(input_key, virtual_input.get_virtual_input_state(input_key))
     else:
-        self._set_key_state(input_key, Input.is_action_pressed(key_name))
+        if key_info["just"]:
+            self._set_key_state(input_key, Input.is_action_just_pressed(key_name))
+        else:
+            self._set_key_state(input_key, Input.is_action_pressed(key_name))
 
 # Public API
+
+func handle_virtual_joystick(movement, force):
+    """Handle virtual joystick."""
+    if movement == "left":
+        self._set_key_state("left", true)
+    elif movement == "right":
+        self._set_key_state("right", true)
+
+func handle_virtual_button(button):
+    """Handle virtual button."""
+    if button == "attack":
+        self._set_key_state("attack", true)
+    elif button == "special":
+        self._set_key_state("special", true)
 
 func enable_key_state(key):
     """Enable key state."""
@@ -265,13 +287,16 @@ func reset_input_state():
     """Reset input state."""
     self.input_state = _generate_empty_input_state()
 
-func handle_player_keys(player_id):
+func handle_player_keys():
     """Handle player keys."""
     for key in INPUT_MAP:
-        self._handle_player_key(key, player_id)
+        self._handle_player_key(key)
 
 func update_system(delta):
     """Update input system."""
     # Delta update
     self.current_delta += delta
 
+func set_virtual_input(virtual_input):
+    """Set current virtual input."""
+    self.virtual_input = virtual_input

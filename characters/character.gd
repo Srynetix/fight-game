@@ -9,7 +9,7 @@ signal damage_update(target)
 
 # Imports
 var attack_system = preload('res://characters/attack_system.gd').new()
-var input_system = preload('res://characters/input_system.gd').new()
+var input_system = preload('res://characters/input_system.gd').new(self.PlayerID)
 
 # Constants
 var MAX_FLOOR_AIRBORNE_TIME = 0.15
@@ -48,7 +48,7 @@ var hit_velocity_next_frame = 0
 
 func get_attack_type_from_input():
     if self.input_system.get_key_state("attack"):
-        if self.input_system.get_key_state("move_left") or self.input_system.get_key_state("move_right"):
+        if self.input_system.get_key_state("left") or self.input_system.get_key_state("right"):
             return 'high'
         else:
             return 'low'
@@ -115,8 +115,8 @@ func _integrate_forces(state):
     # Handle input
     self._handle_character_input()
 
-    var move_left = self.input_system.get_key_state("move_left")
-    var move_right = self.input_system.get_key_state("move_right")
+    var move_left = self.input_system.get_key_state("left")
+    var move_right = self.input_system.get_key_state("right")
     var jump = self.input_system.get_key_state("jump")
     var attack = self.input_system.get_key_state("attack")
 
