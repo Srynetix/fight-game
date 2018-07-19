@@ -2,7 +2,7 @@
 
 ## Done
 
-[x] Virtual Input
+- [x] Virtual Input
 
 ## Doing
 
