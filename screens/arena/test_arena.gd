@@ -27,7 +27,7 @@ func _ready():
     $players/ai.connect("damage_update", self, "update_damages")
 
     # Set virtual input
-    if not virtual_input.Disabled:
+    if virtual_input.is_enabled():
         $players/player.input_system.set_virtual_input(virtual_input)
 
     $game_zone.connect("body_exited", self, "_on_game_zone_body_exited")

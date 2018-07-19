@@ -21,7 +21,7 @@ use_filter = true
 font_data = ExtResource( 4 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="virtual_input" type="Control" index="0"]
+[node name="virtual_input" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -36,6 +36,7 @@ size_flags_vertical = 1
 script = ExtResource( 1 )
 _sections_unfolded = [ "Visibility" ]
 Disabled = false
+OnlyMobile = true
 DEBUG_EVENTS = true
 DEBUG_LIGHTS = true
 
@@ -407,11 +408,11 @@ anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
-mouse_default_cursor_shape = 0
+mouse_default_cursor_shape = 13
 size_flags_horizontal = 1
 size_flags_vertical = 1
 use_top_left = false
-_sections_unfolded = [ "custom_constants" ]
+_sections_unfolded = [ "Mouse", "custom_constants" ]
 
 [node name="ball" type="TextureRect" parent="margin/vbox/hbox/joystick/container" index="0"]
 
@@ -427,7 +428,7 @@ margin_bottom = 92.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
-mouse_default_cursor_shape = 0
+mouse_default_cursor_shape = 6
 size_flags_horizontal = 1
 size_flags_vertical = 1
 texture = ExtResource( 3 )

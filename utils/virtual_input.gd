@@ -1,11 +1,12 @@
 extends Control
 
-"""Touch input control script."""
+"""Virtual input control script."""
 
 signal joystick_moved(movement, pressed, force)
 signal button_pressed(button, pressed)
 
 export (bool) var Disabled = false
+export (bool) var OnlyMobile = true
 export (bool) var DEBUG_EVENTS = false
 export (bool) var DEBUG_LIGHTS = false
 
@@ -26,6 +27,7 @@ var joystick_touch_idx = -1
 var jump_touch_idx = -1
 var attack_touch_idx = -1
 var special_touch_idx = -1
+
 
 func _lighten_button(button):
     var col = button.modulate
@@ -108,6 +110,12 @@ func _on_button_pressed(button):
 # Standard lifecycle
 
 func _ready():
+    if !is_enabled():
+        set_process_input(false)
+        set_process(false)
+        self.visible = false
+        return
+
     if DEBUG_EVENTS:
         connect("joystick_moved", self, "_on_joystick_moved")
         connect("button_pressed", self, "_on_button_pressed")
@@ -191,3 +199,13 @@ func get_virtual_input_state(key):
         return state[0]
     else:
         return state
+
+func is_enabled():
+    if Disabled:
+        return false
+
+    if OnlyMobile:
+        var os_name = OS.get_name()
+        return os_name == "Android" or os_name == "iOS"
+
+    return true
